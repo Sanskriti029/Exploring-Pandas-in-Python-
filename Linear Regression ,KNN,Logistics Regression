@@ -1,0 +1,38 @@
+import pandas as pd
+import seaborn as sns 
+import matplotlib.pyplot as plt
+from sklearn.model_selection  import train_test_split
+from sklearn.linear_model import LinearRegression
+import random  
+
+file_path=r"C:\Users\sansk\OneDrive\Desktop\search_engine_data2.csv"
+data=pd.read_csv(file_path)
+#print(data.describe())
+#print(data.info())
+dummies =pd.get_dummies(data,columns=['YANDEX'])
+print(dummies)
+data1=dummies.drop(columns=['AOL'])
+print(data1)
+print(data1.columns)
+print(data1.corr().to_string())
+X=data1[['Yahoo!']]
+Y=data1['MSN']
+print(X)
+print(Y)
+sns.scatterplot(data=data1)
+plt.plot(X,Y)
+random.seed(1)
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.3)
+regr=LinearRegression()
+regr.fit(X_train,Y_train)
+print(regr.score(X_test,Y_test))
+knn = KNeighborsClassifier(n_neighbors = 15)
+knn.fit(X_train,Y_train)
+print(knn.score(X_test, Y_test))
+print("Accuracy = {}".format(round(knn.score(X_test, Y_test),2) * 100) +"%")
+model = LogisticRegression()
+model.fit(X_train,Y_train)
+Y_pred=model.predict(X_test)
+accuracy = accurarcy_score(Y_test,Y_pred)
+print('Model Score', model.score(X_train,Y_train))
+print("Accuracy: {:.2f}%",format(accuracy*100))
